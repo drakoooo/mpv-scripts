@@ -24,12 +24,12 @@ local function fast_play(table)
     if start_time==nil then
         start_time = os.clock()
     end
-    if os.clock() < start_time +0.5 then
+    if os.clock() < start_time +0.3 then
         if table["event"] == "up" then
             mp.command("cycle pause")
             start_time=nil
          end
-    elseif os.clock() >= start_time +0.5 then
+    elseif os.clock() >= start_time +0.3 then
         if table == nil or table["event"] == "down" or table["event"] == "repeat" and not holding then
             current_speed = mp.get_property_number("speed", 1.0)
             mp.set_property("speed", current_speed * fast_speed_multiplier)
@@ -66,3 +66,4 @@ end
 
 mp.add_forced_key_binding("b", "hold_slow", slow_play, { complex = true, repeatable = false })
 mp.add_forced_key_binding("space", "hold_fast", fast_play, { complex = true, repeatable = false })
+
