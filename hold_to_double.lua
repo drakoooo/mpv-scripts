@@ -21,28 +21,26 @@ local current_speed = nil
 local start_time = nil
 
 local function fast_play(table)
-    if start_time==nil then
+    if start_time == nil then
         start_time = os.clock()
     end
-    if os.clock() < start_time +0.3 then
+    if os.clock() < start_time + 0.3 then
         if table["event"] == "up" then
             mp.command("cycle pause")
-            start_time=nil
-         end
-    elseif os.clock() >= start_time +0.3 then
+            start_time = nil
+        end
+    elseif os.clock() >= start_time + 0.3 then
         if table == nil or table["event"] == "down" or table["event"] == "repeat" and not holding then
             current_speed = mp.get_property_number("speed", 1.0)
             mp.set_property("speed", current_speed * fast_speed_multiplier)
-            mp.osd_message((">> x%.1f"):format(current_speed * fast_speed_multiplier), osd_duration)
+            mp.osd_message((">> x%.1f"):format(current_speed * fast_speed_multiplier), 3600)
             holding = true
-        elseif table["event"] == "up" then  
+        elseif table["event"] == "up" then
             mp.set_property("speed", current_speed)
             mp.osd_message(tostring(current_speed), osd_duration)
             start_time = nil
-            holding=false
+            holding = false
         end
-    
-    
     end
 end
 
@@ -51,7 +49,7 @@ local function slow_play(table)
         if not holding then
             current_speed = mp.get_property_number("speed", 1.0)
             mp.set_property("speed", current_speed / slow_speed_diviser)
-            mp.osd_message((">> x%.1f"):format(current_speed / slow_speed_diviser), osd_duration)
+            mp.osd_message((">> x%.1f"):format(current_speed / slow_speed_diviser), 3600)
             holding = true
         end
     elseif table["event"] == "up" then
@@ -59,11 +57,10 @@ local function slow_play(table)
         mp.osd_message(tostring(current_speed), osd_duration)
         holding = false
     end
-end 
+end
 
 
 
 
 mp.add_forced_key_binding("b", "hold_slow", slow_play, { complex = true, repeatable = false })
 mp.add_forced_key_binding("space", "hold_fast", fast_play, { complex = true, repeatable = false })
-
